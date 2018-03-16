@@ -1,21 +1,70 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { h, Component } from "preact"
+import { Chart, Controls, Loading, Notification, Header } from "./Components"
+import Api from "./Utils/api"
+
+const API = new Api()
 
 class App extends Component {
-  render() {
+  timer = null
+  state = {
+    time: 5000,
+    num: 5,
+    loading: true,
+    response: null,
+    error: null,
+    data: []
+  }
+
+  componentDidMount() {
+    API.start()
+      .then(resp => {
+        this.setState({ response: "Loading initial data..." })
+        return API.getData()
+      })
+      .then(data => this.setState({ data, loading: false }))
+      .then(_ => this.updateData())
+      .catch(err => this.setState({ response: "Error" }))
+  }
+
+  updateData = () => {
+    const { time } = this.state
+    clearTimeout(this.timer)
+    this.timer = setTimeout(() => {
+      API.getData()
+        .then(data => this.setState({ data, error: null }))
+        .then(_ => this.updateData())
+        .catch(err => {
+          this.setState({ error: `You are disconnected: \n ${err.message}` })
+          this.updateData()
+        })
+    }, time)
+  }
+
+  onChange = e => {
+    const { name, value } = e.target
+    this.setState({ [name]: value * 1 })
+  }
+
+  render(_, { loading, response, data, num, error }) {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
+      <section class="hero is-fullheight is-dark">
+        <Header />
+        <div class="hero-body">
+          <div class="container">
+            {!loading && <Controls onChange={this.onChange} />}
+            <div class="columns is-multiline">
+              {loading ? (
+                <Loading response={response} />
+              ) : (
+                data.map(beer => <Chart key={beer.type} num={num} {...beer} />)
+              )}
+            </div>
+          </div>
+          <Notification message={error} data={data} />
+        </div>
+      </section>
+    )
   }
 }
 
-export default App;
+export default App

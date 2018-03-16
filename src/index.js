@@ -1,8 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+import { h, render } from "preact"
+import "./index.css"
+import App from "./App"
+import registerServiceWorker from "./registerServiceWorker"
 
-ReactDOM.render(<App />, document.getElementById('root'));
-registerServiceWorker();
+render(<App />, document.body)
+
+registerServiceWorker()
+
+if (module.hot) {
+  require("preact/devtools")
+}
