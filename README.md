@@ -1,5 +1,7 @@
 # Teste FrontEnd OneBox
 
+![screenshot](./screenshot.png)
+
 demo: [click here](https://carlosqsilva.github.io/onebox-frontend-test)
 
 ```bash
