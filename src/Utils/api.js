@@ -3,14 +3,16 @@ export default class Api {
   dataURL = `${this.startURL}/bottles/getinfos`
 
   handleErrors(response) {
-    if (!response.ok) {
+    if (response.type === "opaque") {
+      return response
+    } else if (!response.ok) {
       throw Error(response.statusText)
     }
     return response
   }
 
   start() {
-    return fetch(this.startURL)
+    return fetch(this.startURL, { mode: "no-cors" })
       .then(this.handleErrors)
       .then(resp => resp.text())
   }
