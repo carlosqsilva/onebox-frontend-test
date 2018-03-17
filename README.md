@@ -15,6 +15,8 @@ npm start
 
 Tive Problemas no uso da API (CORS) que não consegui resolver, utilizei a seguinte [extensão](https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi) para poder dar continuidade no desenvolvimento.
 
+**update 17/03(17:44):** aparentemente `/web` é o unico endpoint que não inclui `allow-access-control-origin: *`, fiz uma correção para ignorar o problema [#92a542d](https://github.com/carlosqsilva/onebox-frontend-test/commit/92a542d67807582f1193d3bf6b635fa3661634e1).
+
 # Tech
 
 Utilizei Create-react-app e as seguintes bibliotecas/framework:
