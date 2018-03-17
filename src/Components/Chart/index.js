@@ -16,15 +16,15 @@ class Chart extends Component {
   }
 
   createData = props => {
-    const { minimum_temp, maximum_temp, current_temp, num } = props
+    const { minimum_temp, maximum_temp, current_temp, points } = props
     this.points.push(current_temp)
 
-    if (this.points.length > num) {
-      this.points = this.points.slice(1, num + 1)
+    if (this.points.length > points) {
+      this.points = this.points.slice(1, points + 1)
     }
 
-    const UpperLimit = Array(num).fill(minimum_temp)
-    const LowerLimit = Array(num).fill(maximum_temp)
+    const UpperLimit = Array(points).fill(minimum_temp)
+    const LowerLimit = Array(points).fill(maximum_temp)
 
     const data = {
       series: [

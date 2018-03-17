@@ -7,8 +7,8 @@ const API = new Api()
 class App extends Component {
   timer = null
   state = {
-    time: 5000,
-    num: 5,
+    frequency: 5000,
+    points: 5,
     loading: true,
     response: null,
     error: null,
@@ -17,17 +17,15 @@ class App extends Component {
 
   componentDidMount() {
     API.start()
-      .then(resp => {
-        this.setState({ response: "Loading initial data..." })
-        return API.getData()
-      })
+      .then(resp => this.setState({ response: "Loading initial data..." }))
+      .then(_ => API.getData())
       .then(data => this.setState({ data, loading: false }))
       .then(_ => this.updateData())
       .catch(err => this.setState({ response: "Error" }))
   }
 
   updateData = () => {
-    const { time } = this.state
+    const { frequency } = this.state
     clearTimeout(this.timer)
     this.timer = setTimeout(() => {
       API.getData()
@@ -37,7 +35,7 @@ class App extends Component {
           this.setState({ error: `You are disconnected: \n ${err.message}` })
           this.updateData()
         })
-    }, time)
+    }, frequency)
   }
 
   onChange = e => {
@@ -45,7 +43,7 @@ class App extends Component {
     this.setState({ [name]: value * 1 })
   }
 
-  render(_, { loading, response, data, num, error }) {
+  render(_, { loading, response, data, points, error }) {
     return (
       <section class="hero is-fullheight is-dark">
         <Header />
@@ -56,7 +54,9 @@ class App extends Component {
               {loading ? (
                 <Loading response={response} />
               ) : (
-                data.map(beer => <Chart key={beer.type} num={num} {...beer} />)
+                data.map(beer => (
+                  <Chart key={beer.type} points={points} {...beer} />
+                ))
               )}
             </div>
           </div>
